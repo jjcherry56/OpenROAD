@@ -13,6 +13,7 @@ target_link_libraries(TestBufRem1
         dpl_lib
         stt_lib
         tst
+        zstd::libzstd
         ${TCL_LIBRARY}
 )
 
@@ -42,6 +43,7 @@ target_link_libraries(TestBufferRemoval2
         stt_lib
         odb
         tst
+        zstd::libzstd
         ${TCL_LIBRARY}
 )
 
@@ -72,6 +74,7 @@ target_link_libraries(TestBufferRemoval3
         stt_lib
         odb
         tst
+        zstd::libzstd
         ${TCL_LIBRARY}
 )
 
@@ -128,6 +131,7 @@ target_link_libraries(TestInsertBuffer
         odb
         odb_test_helper
         tst
+        zstd::libzstd
         ${TCL_LIBRARY}
 )
 

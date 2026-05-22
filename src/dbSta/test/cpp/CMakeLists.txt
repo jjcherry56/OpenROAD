@@ -9,6 +9,7 @@ target_link_libraries(TestHconn
         dbSta_lib
         tst
         utl_lib
+        zstd::libzstd
         ${TCL_LIBRARY}
 )
 
@@ -39,6 +40,7 @@ target_link_libraries(TestDbSta
         stt_lib
         odb
         tst
+        zstd::libzstd
         ${TCL_LIBRARY}
 )
 
@@ -68,6 +70,7 @@ target_link_libraries(TestReadVerilog
         stt_lib
         odb
         tst
+        zstd::libzstd
         ${TCL_LIBRARY}
 )
 
@@ -97,6 +100,7 @@ target_link_libraries(TestWriteVerilog
         stt_lib
         odb
         tst
+        zstd::libzstd
         ${TCL_LIBRARY}
 )
 

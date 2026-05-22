@@ -11,6 +11,7 @@ target_link_libraries(CutGTests
         ${ABC_LIBRARY}
         cut
         tst
+        zstd::libzstd
         ${TCL_LIBRARY}
 )
 

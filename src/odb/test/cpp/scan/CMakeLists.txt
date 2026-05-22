@@ -12,6 +12,7 @@ set(TEST_LIBS
   ${TCL_LIBRARY}
   Boost::boost
   utl_lib
+  zstd::libzstd
   GTest::gtest
   GTest::gtest_main
   GTest::gmock

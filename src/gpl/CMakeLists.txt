@@ -59,6 +59,9 @@ target_include_directories(gpl_lib
   PUBLIC
     include
     ${LEMON_INCLUDE_DIRS}
+  # Prefer /opt/or-tools headers over Homebrew's (absl adds /opt/homebrew/include)
+  BEFORE PRIVATE
+    /opt/or-tools/include
 )
 
 target_link_libraries(gpl_lib

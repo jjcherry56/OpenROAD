@@ -21,7 +21,7 @@ target_link_libraries(3dblox
   PUBLIC
     db
     utl_lib
-    yaml-cpp
+    yaml-cpp::yaml-cpp
     OpenSTA
 )
 

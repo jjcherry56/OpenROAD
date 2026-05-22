@@ -15,6 +15,7 @@ include(CheckIPOSupported)
 check_ipo_supported(RESULT ipo_supported OUTPUT error)
 
 find_package(Boost CONFIG REQUIRED COMPONENTS serialization)
+find_package(zstd REQUIRED)
 find_package(OpenMP REQUIRED)
 find_package(VTune)
 
@@ -107,6 +108,7 @@ target_link_libraries(drt_lib
     OpenMP::OpenMP_CXX
     ${Boost_LIBRARIES}
     ZLIB::ZLIB
+    zstd::libzstd
 )
 
 target_sources(drt

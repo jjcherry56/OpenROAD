@@ -69,3 +69,6 @@ projectview.bazelproject
 tmp/
 
 .playwright-mcp
+
+cmake_test_*
+Testing/

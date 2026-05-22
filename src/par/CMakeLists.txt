@@ -38,6 +38,9 @@ add_library(par_lib
 target_include_directories(par_lib
   PUBLIC
     include
+  # Prefer /opt/or-tools headers over Homebrew's (absl adds /opt/homebrew/include)
+  BEFORE PRIVATE
+    /opt/or-tools/include
 )
 
 target_link_libraries(par_lib

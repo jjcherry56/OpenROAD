@@ -19,6 +19,7 @@
 #include <new>
 #include <sstream>
 
+#define BOOST_STACKTRACE_GNU_SOURCE_NOT_REQUIRED
 #include "boost/stacktrace/stacktrace.hpp"
 #include "ord/OpenRoad.hh"
 #include "utl/Logger.h"

@@ -10,6 +10,7 @@ set(TEST_LIBS
   odb
   mpl_lib
   tst
+  zstd::libzstd
 )
 
 add_executable(TestSnapper TestSnapper.cpp)

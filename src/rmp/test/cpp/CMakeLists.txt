@@ -12,6 +12,7 @@ target_link_libraries(RmpGTests
         cut
         rmp_lib
         tst
+        zstd::libzstd
         ${TCL_LIBRARY}
 )
 

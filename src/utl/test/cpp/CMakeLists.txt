@@ -5,6 +5,7 @@ set(TEST_LIBS
   GTest::gtest_main
   GTest::gmock
   utl_lib
+  zstd::libzstd
 )
 
 add_executable(TestCFileUtils TestCFileUtils.cpp)

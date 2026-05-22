@@ -62,6 +62,7 @@ target_link_libraries(cts_unittest
     dbSta_lib
     OpenSTA
     odb
+    zstd::libzstd
 )
 
 gtest_discover_tests(cts_unittest

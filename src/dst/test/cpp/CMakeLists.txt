@@ -1,6 +1,7 @@
 set(TEST_LIBS
     dst
     dl
+    zstd::libzstd
     GTest::gtest
     GTest::gtest_main
     GTest::gmock

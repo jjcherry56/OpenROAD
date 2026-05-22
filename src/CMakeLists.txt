@@ -127,8 +127,16 @@ include(UseSWIG)
 find_package(Boost CONFIG REQUIRED)
 message(STATUS "boost: ${Boost_VERSION}")
 
+# Prefer Homebrew's Abseil over OR-Tools' bundled version (avoids lts_20260107 symbol conflicts)
+set(absl_DIR "/opt/homebrew/lib/cmake/absl" CACHE PATH "Force Homebrew Abseil" FORCE)
 find_package(absl REQUIRED)
 message(STATUS "absl: ${absl_VERSION}")
+
+# Prefer Homebrew's zstd (or-tools in CMAKE_PREFIX_PATH may not provide it)
+set(zstd_DIR "/opt/homebrew/lib/cmake/zstd")
+find_package(zstd REQUIRED)
+# Test targets need this to resolve zstd/ICU when linking
+link_directories(/opt/homebrew/lib /opt/homebrew/opt/icu4c/lib)
 
 if (ENABLE_TESTS)
   find_package(GTest REQUIRED)
@@ -319,6 +327,10 @@ target_include_directories(openroad
     ../include
 )
 
+target_link_directories(openroad PRIVATE
+  /opt/homebrew/lib
+  /opt/homebrew/opt/icu4c/lib
+)
 target_link_libraries(openroad
   ifp
   pad
@@ -359,10 +371,14 @@ target_link_libraries(openroad
   cli_completer
   linenoise
   absl::synchronization
+  icudata
+  icuuc
+  icui18n
   ${ABC_LIBRARY}
   ${TCL_LIBRARY}
   ${CMAKE_THREAD_LIBS_INIT}
   ${Boost_LIBRARIES}
+  zstd::libzstd
 )
 
 target_compile_definitions(openroad PRIVATE BUILD_TYPE="${CMAKE_BUILD_TYPE}")

@@ -50,6 +50,9 @@ add_library(mpl_lib
 target_include_directories(mpl_lib
   PUBLIC
     include
+  # Prefer /opt/or-tools headers over Homebrew's (absl adds /opt/homebrew/include)
+  BEFORE PRIVATE
+    /opt/or-tools/include
 )
 
 target_link_libraries(mpl_lib
