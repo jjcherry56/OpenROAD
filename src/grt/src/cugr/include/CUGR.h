@@ -5,6 +5,7 @@
 #include <memory>
 #include <set>
 #include <string>
+#include <unordered_map>
 #include <utility>
 #include <vector>
 
@@ -98,6 +99,7 @@ class CUGR
   }
   void addDirtyNet(odb::dbNet* net);
   void updateNet(odb::dbNet* net);
+  void removeNet(odb::dbNet* net);
   void routeIncremental();
 
   const std::vector<int>& getOriginalResources() const;
@@ -115,6 +117,23 @@ class CUGR
   float calculatePartialSlack();
   float getNetSlack(odb::dbNet* net);
   void setInitialNetSlacks();
+
+  /**
+   * @brief Computes per-layer NDR demand / cost multipliers for a net.
+   *
+   * Per-layer formula matches FastRoute's
+   * `GlobalRouter::computeUserLayerNdr` shape:
+   *   `ndr_pitch  = ndr_width / 2 + ndr_spacing + default_width / 2`
+   *   `factor[l]  = max(1.0, ndr_pitch / default_pitch)`
+   *
+   * @param db_net The net whose NDR (if any) we are reading.
+   *
+   * @returns Vector of length `grid_graph_->getNumLayers()`; entry
+   *          `l` is the factor on layer `l`, or 1.0 on layers
+   *          without an NDR rule (and for nets that carry no NDR
+   *          at all).
+   */
+  std::vector<double> computeNdrCosts(odb::dbNet* db_net) const;
   /**
    * @brief Builds the rip-up set of nets touching a congested edge.
    *
@@ -191,7 +210,7 @@ class CUGR
   std::unique_ptr<GridGraph> grid_graph_;
   std::vector<int> net_indices_;
   std::vector<std::unique_ptr<GRNet>> gr_nets_;
-  odb::PtrMap<odb::dbNet, GRNet*> db_net_map_;
+  std::unordered_map<odb::dbNet*, GRNet*> db_net_map_;
 
   odb::dbDatabase* db_;
   utl::Logger* logger_;
