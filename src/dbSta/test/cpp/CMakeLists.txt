@@ -39,7 +39,7 @@ target_link_libraries(TestDbSta
         dpl_lib
         stt_lib
         odb
-        tst
+        tst_integrated_fixture
         zstd::libzstd
         ${TCL_LIBRARY}
 )
@@ -69,7 +69,7 @@ target_link_libraries(TestReadVerilog
         dpl_lib
         stt_lib
         odb
-        tst
+        tst_integrated_fixture
         zstd::libzstd
         ${TCL_LIBRARY}
 )
@@ -99,7 +99,7 @@ target_link_libraries(TestWriteVerilog
         dpl_lib
         stt_lib
         odb
-        tst
+        tst_integrated_fixture
         zstd::libzstd
         ${TCL_LIBRARY}
 )
