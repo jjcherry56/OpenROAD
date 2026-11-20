@@ -45,8 +45,8 @@ for { set i 1 } { $i <= 100 } { incr i } {
 }
 ord::design_created
 
-proc arrival { vertex } {
-  return [[sta::vertex_worst_arrival_path $vertex max] arrival]
+proc arrival { pin } {
+  return [get_property $pin arrival_max]
 }
 
 proc summarize_solution { } {
@@ -61,7 +61,7 @@ proc summarize_solution { } {
     set i1o [get_pin i1-$i/Z]
     set i2i [get_pin i2-$i/A]
 
-    set delay [expr [arrival [$i2i vertices]] - [arrival [$i1i vertices]]]
+    set delay [expr [arrival $i2i] - [arrival $i1i]]
 
     set area 0.0
     set sequence ""

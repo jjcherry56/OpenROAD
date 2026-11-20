@@ -144,10 +144,18 @@ void RepairDesign::performEarlySizingRound(int& repaired_net_count)
                2,
                "Annotating slew for driver {}",
                network_->pathName(drvr->pin()));
+    sta::Sdc* sdc = resizer_->tgt_slew_corner_->mode()->sdc();
     for (auto rf : sta::RiseFall::range()) {
-      if (!drvr->slewAnnotated(rf, min_) && !drvr->slewAnnotated(rf, max_)) {
-        sta_->setAnnotatedSlew(drvr,
-                               resizer_->tgt_slew_corner_,
+      // Slew annotations are per pin/rise/fall/min/max in the mode SDC.
+      // The vertex flag is only "any annotation exists".
+      float annotated_slew = 0.0;
+      bool min_exists = false;
+      bool max_exists = false;
+      sdc->annotatedSlew(drvr->pin(), rf, min_, annotated_slew, min_exists);
+      sdc->annotatedSlew(drvr->pin(), rf, max_, annotated_slew, max_exists);
+      if (!min_exists && !max_exists) {
+        sta_->setAnnotatedSlew(drvr->pin(),
+                               resizer_->tgt_slew_corner_->mode(),
                                sta::MinMaxAll::all(),
                                rf->asRiseFallBoth(),
                                resizer_->tgt_slews_[rf->index()]);
@@ -236,8 +244,8 @@ void RepairDesign::performEarlySizingRound(int& repaired_net_count)
 
     for (auto rf : sta::RiseFall::range()) {
       if (!slew_user_annotated.contains(std::make_pair(drvr, rf->index()))) {
-        sta_->unsetAnnotatedSlew(drvr,
-                                 resizer_->tgt_slew_corner_,
+        sta_->unsetAnnotatedSlew(drvr->pin(),
+                                 resizer_->tgt_slew_corner_->mode(),
                                  sta::MinMaxAll::all(),
                                  rf->asRiseFallBoth());
       }
@@ -309,8 +317,8 @@ void RepairDesign::repairDesign(
             }
           }
           if (slew_viol) {
-            sta_->setAnnotatedSlew(vertex,
-                                   corner,
+            sta_->setAnnotatedSlew(vertex->pin(),
+                                   corner->mode(),
                                    max_->asMinMaxAll(),
                                    sta::RiseFallBoth::riseFall(),
                                    limit);
@@ -391,8 +399,10 @@ void RepairDesign::repairDesign(
     for (auto vertex : annotations_to_clean_up) {
       for (auto corner : sta_->scenes()) {
         for (const sta::RiseFall* rf : sta::RiseFall::range()) {
-          sta_->unsetAnnotatedSlew(
-              vertex, corner, sta::MinMaxAll::max(), rf->asRiseFallBoth());
+          sta_->unsetAnnotatedSlew(vertex->pin(),
+                                   corner->mode(),
+                                   sta::MinMaxAll::max(),
+                                   rf->asRiseFallBoth());
         }
       }
     }

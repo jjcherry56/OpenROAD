@@ -76,10 +76,7 @@ void Tech::readLef(const std::string& file_name)
 
 void Tech::readLiberty(const std::string& file_name)
 {
-  // TODO: take corner & min/max args
-  getSta()->readLiberty(file_name.c_str(),
-                        getSta()->cmdScene(),
-                        sta::MinMaxAll::all(),
+  getSta()->readLiberty(file_name,
                         true /* infer_latches */);
 }
 

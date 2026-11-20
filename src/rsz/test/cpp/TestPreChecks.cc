@@ -16,6 +16,7 @@
 #include "sta/Liberty.hh"
 #include "sta/MinMax.hh"
 #include "sta/Scene.hh"
+#include "sta/StringUtil.hh"
 #include "sta/TimingArc.hh"
 #include "sta/Transition.hh"
 #include "tst/IntegratedFixture.h"
@@ -33,7 +34,9 @@ class TestPreChecks : public tst::IntegratedFixture
 
   void SetUp() override
   {
-    sta_->makeScenes({"fast", "slow"});
+    const sta::StringSeq no_libs;
+    sta_->makeScene("fast", "default", no_libs, no_libs, "", "");
+    sta_->makeScene("slow", "default", no_libs, no_libs, "", "");
     fast_ = sta_->findScene("fast");
     slow_ = sta_->findScene("slow");
     readLiberty("_main/src/rsz/test/Nangate45/Nangate45_fast.lib", fast_);

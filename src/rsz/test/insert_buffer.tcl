@@ -1,13 +1,13 @@
 # insert_buffer command test
 source "helpers.tcl"
-
-define_corners fast slow
-read_liberty -corner slow Nangate45/Nangate45_slow.lib
-read_liberty -corner fast Nangate45/Nangate45_fast.lib
+read_liberty Nangate45/Nangate45_slow.lib
+read_liberty Nangate45/Nangate45_fast.lib
 read_lef Nangate45/Nangate45.lef
 read_verilog rebuffer1.v
 link_design top
 read_def -floorplan_initialize rebuffer1.def
+define_scene fast -liberty Nangate45/Nangate45_fast.lib
+define_scene slow -liberty Nangate45/Nangate45_slow.lib
 
 puts "--- Test 1: After Driver ---"
 set net [get_nets u_mid1/u_leaf1/n1]

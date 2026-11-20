@@ -3215,9 +3215,13 @@ void Rebuffer::fullyRebuffer(sta::Pin* user_pin)
     sta::Slack sta_slack
         = req_path ? (req_path->required() - req_path->arrival()) : sta::INF;
 
-    // The slack estimation error as observed on the original tree: we have both
-    // the full STA figure and our timing model estimate and we can compare
-    sta::Delay original_tree_slack_error = slack - sta_slack;
+    // Model slack minus STA slack on the original tree. An unconstrained
+    // driver has no finite STA slack, and subtracting +/-INF overflows the
+    // area-recovery relaxation into FixedDelay.
+    sta::Delay original_tree_slack_error = 0.0;
+    if (sta_slack < sta::INF && sta_slack > -sta::INF) {
+      original_tree_slack_error = slack - sta_slack;
+    }
 
     BnetPtr unbuffered_tree = resteiner(stripTreeBuffers(original_tree));
     BnetPtr timing_tree = unbuffered_tree;

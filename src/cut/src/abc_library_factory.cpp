@@ -580,7 +580,7 @@ int AbcLibraryFactory::StaTimeUnitToAbcInt(sta::Unit* time_unit)
 }
 
 int AbcLibraryFactory::ScaleAbbreviationToExponent(
-    const std::string& scale_abbreviation)
+    std::string_view scale_abbreviation)
 {
   if (scale_abbreviation == "m") {
     return 3;

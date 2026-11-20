@@ -186,16 +186,21 @@ sta::define_cmd_args "set_wire_rc" {[-clock] [-signal] [-data]\
                                       [-resistance res]\
                                       [-capacitance cap]\
                                       [-corner corner]\
+                                      [-scene scene]\
                                       [-tech tech]\
                                       [-redistribution_layer]}
 
 proc set_wire_rc { args } {
   sta::parse_key_args "set_wire_rc" args \
-    keys {-layer -layers -resistance -capacitance -corner \
+    keys {-layer -layers -resistance -capacitance -corner -scene \
           -h_resistance -h_capacitance -v_resistance -v_capacitance \
           -tech} \
     flags {-clock -signal -data -redistribution_layer}
 
+  # -corner names a scene. -scene takes precedence when both are present.
+  if { ![info exists keys(-scene)] && [info exists keys(-corner)] } {
+    set keys(-scene) $keys(-corner)
+  }
   set corner [sta::parse_scene_or_null keys]
 
   set target_techs [est::parse_wire_rc_techs keys flags has_selector]

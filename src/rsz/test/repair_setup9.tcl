@@ -2,13 +2,14 @@
 source "helpers.tcl"
 source Nangate45/Nangate45.vars
 
-define_corners fast slow
-read_liberty -corner slow Nangate45/Nangate45_slow.lib
-read_liberty -corner fast Nangate45/Nangate45_fast.lib
+read_liberty Nangate45/Nangate45_slow.lib
+read_liberty Nangate45/Nangate45_fast.lib
 read_lef Nangate45/Nangate45.lef
 read_verilog repair_setup9.v
 link_design top
 read_def -floorplan_initialize repair_setup9.def
+define_scene fast -liberty Nangate45/Nangate45_fast.lib
+define_scene slow -liberty Nangate45/Nangate45_slow.lib
 
 #place the design
 #initialize_floorplan -die_area "0 0 40 1200" -core_area "0 0 40 1200" \

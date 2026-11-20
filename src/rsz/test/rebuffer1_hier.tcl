@@ -1,13 +1,14 @@
 # rebuffering test in hierarchical flow
 source "helpers.tcl"
 
-define_corners fast slow
-read_liberty -corner slow Nangate45/Nangate45_slow.lib
-read_liberty -corner fast Nangate45/Nangate45_fast.lib
+read_liberty Nangate45/Nangate45_slow.lib
+read_liberty Nangate45/Nangate45_fast.lib
 read_lef Nangate45/Nangate45.lef
 read_verilog rebuffer1_hier.v
 link_design top -hier
 read_def -floorplan_initialize rebuffer1_hier.def
+define_scene fast -liberty Nangate45/Nangate45_fast.lib
+define_scene slow -liberty Nangate45/Nangate45_slow.lib
 
 #sdc
 create_clock -period 0.3 clk

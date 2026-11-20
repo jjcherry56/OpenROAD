@@ -4928,6 +4928,11 @@ double Resizer::findMaxWireLength(sta::LibertyPort* drvr_port,
   // Make a (hierarchical) block to use as a scratchpad.
   odb::dbBlock* block = odb::dbBlock::create(block_, "wire_delay", '/');
   std::unique_ptr<dbSta> sta = sta_->makeBlockSta(block);
+  // Create the same scenes in the same order, this will make liberty indices
+  // line up and allow sharing the library between the two dbSta instances.
+  // makeScenes() is gone; makeScene() with empty liberty lists recreates
+  // named scenes on the scratch sta's default mode.
+  sta->makeScenes(sta_->scenes());
 
   const double drvr_r = drvr_port->driveResistance();
   // wire_length_low - lower bound
@@ -5011,14 +5016,6 @@ void Resizer::cellWireDelay(sta::LibertyPort* drvr_port,
 {
   sta::Network* network = sta->network();
   sta::ArcDelayCalc* arc_delay_calc = sta->arcDelayCalc();
-
-  // Create the same scenes in the same order, this will make liberty indices
-  // line up and allow sharing the library between the two dbSta instances
-  sta::StringSeq scene_names;
-  for (auto scene : sta_->scenes()) {
-    scene_names.emplace_back(scene->name().c_str());
-  }
-  sta->makeScenes(scene_names);
 
   sta::Instance* top_inst = network->topInstance();
   // Tmp net for parasitics to live on.

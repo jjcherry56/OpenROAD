@@ -1357,12 +1357,10 @@ void TechChar::createStaInstance()
   openStaChar_ = openSta_->makeBlockSta(charBlock_);
 
   // Create the same scenes in the same order, this will make liberty indices
-  // line up and allow sharing the library between the two dbSta instances
-  sta::StringSeq scene_names;
-  for (auto scene : openSta_->scenes()) {
-    scene_names.push_back(scene->name().c_str());
-  }
-  openStaChar_->makeScenes(scene_names);
+  // line up and allow sharing the library between the two dbSta instances.
+  // makeScenes() is gone; makeScene() with empty liberty lists recreates
+  // named scenes on the scratch sta's default mode.
+  openStaChar_->makeScenes(openSta_->scenes());
 
   // Gets the corner and other analysis attributes from the new instance.
   charCorner_ = openStaChar_->cmdScene();
@@ -1884,7 +1882,6 @@ void TechChar::create()
       sta::Pin* inPin = db_network_->dbToSta(inBTerm);
       sta::Pin* outPin = db_network_->dbToSta(outBTerm);
       sta::Vertex* outPinVert = graph->pinLoadVertex(outPin);
-      sta::Vertex* inPinVert = graph->pinDrvrVertex(inPin);
 
       // Gets the first pin of the last net. Needed to set a new parasitic
       // (load) value.
@@ -1944,8 +1941,8 @@ void TechChar::create()
             // Sets the slew on the input vertex.
             // Here the new pattern is created (combination of load, buffers
             // and slew values).
-            openStaChar_->setAnnotatedSlew(inPinVert,
-                                           charCorner_,
+            openStaChar_->setAnnotatedSlew(inPin,
+                                           charCorner_->mode(),
                                            sta::MinMaxAll::all(),
                                            sta::RiseFallBoth::riseFall(),
                                            inputslew);

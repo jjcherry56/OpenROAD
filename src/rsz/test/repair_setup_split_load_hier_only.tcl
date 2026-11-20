@@ -1,14 +1,15 @@
 # Probe SplitLoadMove vs SplitLoadGenerator/Candidate behavior.
 source "helpers.tcl"
 source Nangate45/Nangate45.vars
-define_corners fast slow
-read_liberty -corner slow Nangate45/Nangate45_slow.lib
-read_liberty -corner fast Nangate45/Nangate45_fast.lib
+read_liberty Nangate45/Nangate45_slow.lib
+read_liberty Nangate45/Nangate45_fast.lib
 read_lef Nangate45/Nangate45.lef
 read_verilog split_load_hier.v
 link_design reg1 -hier
 # Load the placed fixture to keep this test independent of floorplan and placement.
 read_def -floorplan_initialize repair_setup_split_load_hier_only.def
+define_scene fast -liberty Nangate45/Nangate45_fast.lib
+define_scene slow -liberty Nangate45/Nangate45_slow.lib
 create_clock -period 0.3 clk
 source Nangate45/Nangate45.rc
 set_wire_rc -layer metal3

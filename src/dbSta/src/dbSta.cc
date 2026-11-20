@@ -307,13 +307,13 @@ void dbSta::makeSdcNetwork()
   sdc_network_ = new dbSdcNetwork(network_);
 }
 
-// Extend the default StaLevelizeObserver (Search + GraphDelayCalc forwarding)
-// to also invalidate dbSta's driver-vertex cache.
+// Extend the default StaLevelizeObserver to also invalidate dbSta's
+// driver-vertex cache.
 class DbStaLevelizeObserver : public StaLevelizeObserver
 {
  public:
-  DbStaLevelizeObserver(dbSta* sta, Search* search, GraphDelayCalc* gdc)
-      : StaLevelizeObserver(search, gdc), sta_(sta)
+  DbStaLevelizeObserver(dbSta* sta, Search* search)
+      : StaLevelizeObserver(search), sta_(sta)
   {
   }
   void levelsChangedBefore() override
@@ -334,8 +334,7 @@ class DbStaLevelizeObserver : public StaLevelizeObserver
 void dbSta::makeObservers()
 {
   Sta::makeObservers();
-  setLevelizeObserver(
-      new DbStaLevelizeObserver(this, search_, graph_delay_calc_));
+  setLevelizeObserver(new DbStaLevelizeObserver(this, search_));
 }
 
 void dbSta::invalidateLevelizedDrvrVertices()
